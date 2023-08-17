@@ -1,0 +1,32 @@
+body {
+  background-color: #000;
+}
+.diagram {
+  border: 0px;
+  background-color: #000;
+}
+
+.diagram path:nth-of-type(1) {
+  fill: #eb5757;
+}
+.diagram path:nth-of-type(2) {
+  fill: #f2994a;
+}
+.diagram path:nth-of-type(3) {
+  fill: #6fcf97;
+}
+.diagram path:nth-of-type(4) {
+  fill: #9b51e0;
+}
+.diagram path:nth-of-type(5) {
+  fill: #2f80ed;
+}
+.diagram path:nth-of-type(6) {
+  fill: #56ccf2;
+}
+.diagram path:nth-of-type(7) {
+  fill: #219653;
+}
+.diagram path:nth-of-type(8) {
+  fill: #f2c94c;
+}

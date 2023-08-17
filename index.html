@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import Diagram from "./diagram.js";
+
+    const startData = [
+      { p: 35, r: 70 },
+      { p: 35, r: 100 },
+      { p: 12, r: 50 },
+      { p: 8, r: 80 },
+      { p: 3, r: 90 },
+      { p: 2, r: 30 },
+      { p: 3, r: 55 },
+      { p: 2, r: 100 },
+    ];
+
+    const diagram = new Diagram(startData);
+
+    root.append(diagram.element);
+
+    // diagram.element.addEventListener('click', () => {
+    // });
+  </script>
+</body>
