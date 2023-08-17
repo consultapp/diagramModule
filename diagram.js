@@ -24,7 +24,6 @@ export default class Diagram {
       return result;
     });
 
-    console.log(pieces);
     return `
       <svg viewBox="0 0 ${this.dimention} ${this.dimention}" class="diagram">
       ${pieces.map((item) => this._makePiece(...item))}
