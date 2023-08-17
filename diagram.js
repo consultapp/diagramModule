@@ -11,7 +11,7 @@ export default class Diagram {
   }
 
   _render() {
-    const wrap = document.createElement("svg");
+    const wrap = document.createElement("div");
     wrap.innerHTML = this._getTemplate();
     this._element = wrap.firstElementChild;
   }
