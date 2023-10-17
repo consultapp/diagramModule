@@ -10,21 +10,18 @@
     import Diagram from "./diagram.js";
 
     const startData = [
-      { p: 35, r: 70 },
-      { p: 35, r: 100 },
-      { p: 12, r: 50 },
-      { p: 8, r: 80 },
-      { p: 3, r: 90 },
-      { p: 2, r: 30 },
-      { p: 3, r: 55 },
-      { p: 2, r: 100 },
+      { percent: 25, radiusPercent: 0.7, color: "#eb5757" },
+      { percent: 25, radiusPercent: 1, color: "#f2994a" },
+      { percent: 12, radiusPercent: 0.5, color: "#6fcf97" },
+      { percent: 18, radiusPercent: 0.8, color: "#9b51e0" },
+      { percent: 3, radiusPercent: 0.9, color: "#2f80ed" },
+      { percent: 12, radiusPercent: 0.3, color: "#56ccf2" },
+      { percent: 3, radiusPercent: 0.5, color: "#219653" },
+      { percent: 2, radiusPercent: 1, color: "#f2c94c" },
     ];
 
     const diagram = new Diagram(startData);
 
     root.append(diagram.element);
-
-    // diagram.element.addEventListener('click', () => {
-    // });
   </script>
 </body>

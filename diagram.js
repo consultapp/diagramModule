@@ -6,7 +6,6 @@ export default class Diagram {
     this.data = data;
     this.dimention = dimention;
     this.center = dimention / 2;
-    this.maxRadius = (dimention / 2) * 0.9;
     this._render();
   }
 
@@ -14,36 +13,39 @@ export default class Diagram {
     const wrap = document.createElement("div");
     wrap.innerHTML = this._getTemplate();
     this._element = wrap.firstElementChild;
+    this._element.style.width = this.dimention + "px";
+    this._element.style.height = this.dimention + "px";
+
+    let rotation = 0;
+    this.data.forEach(({ percent, radiusPercent, color }) => {
+      this._element.append(
+        this._makePiece(
+          rotation,
+          percent,
+          Math.round(this.center * radiusPercent),
+          color
+        )
+      );
+      rotation += percent;
+    });
   }
 
   _getTemplate() {
-    let start = 0;
-    const pieces = this.data.map(({ p, r }) => {
-      const result = [start, start + p, Math.min(this.maxRadius, r)];
-      start += p;
-      return result;
-    });
-
-    return `
-      <svg viewBox="0 0 ${this.dimention} ${this.dimention}" class="diagram">
-      ${pieces.map((item) => this._makePiece(...item))}
-      <circle r="${this.dimention * 0.05}" cx="50%" cy="50%"></circle>
-    </svg>
-      `;
+    return `<div class="diagram" ><div class="diagram__center"></div></div>`;
   }
 
-  _getCirclePoint(percent = null, radius = this.maxRadius) {
-    const corner = ((percent + this.SHIFT) * 3.6) / 57.3; // radian
-    const x = this.center - Math.cos(corner) * radius;
-    const y = this.center - Math.sin(corner) * radius;
-    return `${x},${y}`;
-  }
-
-  _makePiece(start, end = 0, radius = this.maxRadius) {
-    if (typeof start !== "number") return "";
-    const startCoords = this._getCirclePoint(start, radius);
-    const endCoords = this._getCirclePoint(Math.min(100, end), radius);
-    return ` <path d="M${this.center},${this.center} L${startCoords} A90,90 0 0,1 ${endCoords} Z"></path>`;
+  _makePiece(rotation, percent, radius = this.center, color) {
+    const piece = document.createElement("div");
+    piece.classList.add("diagram__chart");
+    piece.style.setProperty(
+      "--rotation",
+      Math.round((rotation * 360) / 100) + "deg"
+    );
+    piece.style.setProperty("--value", percent + "%");
+    piece.style.setProperty("--dimention", 2 * radius + "px");
+    piece.style.setProperty("--color", color);
+    piece.style.setProperty("--shift", this.center - radius + "px");
+    return piece;
   }
 
   updateData(newData = this.data) {}
