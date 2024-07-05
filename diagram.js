@@ -1,5 +1,4 @@
 export default class Diagram {
-  SHIFT = 25;
   _element = null;
 
   constructor(data = [], dimention = 200) {
