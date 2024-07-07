@@ -1,38 +1,41 @@
 export default class DiagramChart extends HTMLElement {
   static template = document.createElement("template");
+  static observedAttributes = ["data-pieces", "dimention"];
+
   data = [];
   dimention = 200;
+  centerDiametr = 10;
 
   constructor() {
     super();
-
-    this.data = JSON.parse(this.dataset.pieces) ?? [];
-    this.dimention = this.getAttribute("dimention") ?? this.dimention;
-    this.center = this.dimention / 2;
-    this._render();
+    this.attachShadow({ mode: "open" });
   }
 
   _render() {
-    this.attachShadow({ mode: "open" });
+    console.log("render");
+    this.center = this.dimention / 2;
+    this.shadowRoot.innerHTML = "";
     this.shadowRoot.append(DiagramChart.template.content.cloneNode(true));
 
     this.style.width = this.dimention + "px";
     this.style.height = this.dimention + "px";
+    this.style.display = "block";
 
-    let rotation = 0;
-    this.data.forEach(({ percent, radiusPercent, color }) => {
-      console.log("first", { percent, radiusPercent, color });
-      this.shadowRoot.append(
-        DiagramChart.makePiece(
-          rotation,
-          percent,
-          color,
-          Math.round(this.center * radiusPercent),
-          this.center
-        )
-      );
-      rotation += percent;
-    });
+    if (this.data?.length) {
+      let rotation = 0;
+      this.data.forEach(({ percent, radiusPercent, color }) => {
+        this.shadowRoot.append(
+          DiagramChart.makePiece(
+            rotation,
+            percent,
+            color,
+            Math.round(this.center * radiusPercent),
+            this.center
+          )
+        );
+        rotation += percent;
+      });
+    }
   }
 
   static makePiece(rotation, percent, color, radius, center) {
@@ -48,16 +51,6 @@ export default class DiagramChart extends HTMLElement {
     return piece;
   }
 
-  get dimention() {
-    this.getAttribute("dimention");
-  }
-  /**
-   * @param {number} d
-   */
-  set dimention(d) {
-    this.setAttribute("dimention", d);
-  }
-
   /**
    * @param {string} d
    */
@@ -65,9 +58,21 @@ export default class DiagramChart extends HTMLElement {
     this.setAttribute("dataPieces", d);
     this.data = JSON.parce(d);
   }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log("attributeChangedCallback", name);
+    if (name === "data-pieces" && newValue) {
+      this.data = JSON.parse(newValue) ?? [];
+      this._render();
+    } else if (name === "dimention" && newValue && oldValue !== newValue) {
+      this.dimention = newValue;
+      this.style.width = this.dimention + "px";
+      this.style.height = this.dimention + "px";
+      this._render();
+    }
+  }
 }
 
-DiagramChart.observedAttributes = ["data-pieces", "dimention"];
 DiagramChart.template.innerHTML = `
         <style>
             :host {
@@ -76,18 +81,7 @@ DiagramChart.template.innerHTML = `
                 background-color: white;
             }
 
-            div#center {
-                border-radius: 50%;
-                width: 10%;
-                height: 10%;
-                position: absolute;
-                left: 45%;
-                top: 45%;
-                background-color: black;
-                z-index: 2;
-            } 
-
-            div:not(#center) {
+            div {
                 position: absolute;
                 border-radius: 50%;
 
@@ -106,6 +100,5 @@ DiagramChart.template.innerHTML = `
                 z-index: 1;
             }
         </style>
-        <div id='center'></div>
 `;
 customElements.define("diagram-chart", DiagramChart);
